@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: appdb
       POSTGRES_USER: appuser
-      POSTGRES_PASSWORD: local-demo-only
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U appuser -d appdb"]
       interval: 5s
@@ -13,12 +13,12 @@ services:
   backend:
     build: ./app/backend
     environment:
-      DJANGO_SECRET_KEY: local-demo-key
+      DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
       DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,backend
       POSTGRES_HOST: database
       POSTGRES_DB: appdb
       POSTGRES_USER: appuser
-      POSTGRES_PASSWORD: local-demo-only
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "8005:8000"
     depends_on:
