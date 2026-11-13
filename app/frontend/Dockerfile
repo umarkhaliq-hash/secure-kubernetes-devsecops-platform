@@ -5,6 +5,11 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-FROM nginx:1.27-alpine
+FROM nginxinc/nginx-unprivileged:stable-alpine
 COPY --from=build /app/dist /usr/share/nginx/html
-EXPOSE 80
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+USER root
+RUN chmod 644 /etc/nginx/conf.d/default.conf
+USER 101
+USER 101
+EXPOSE 8081
