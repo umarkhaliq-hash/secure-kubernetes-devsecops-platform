@@ -1,0 +1,33 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: secure-platform
+resources:
+  - ../../base
+commonLabels:
+  app.kubernetes.io/part-of: secure-kubernetes-devsecops-platform
+  app.kubernetes.io/managed-by: kustomize
+  environment: local
+images:
+  - name: secure-platform/backend
+    newTag: local
+  - name: secure-platform/frontend
+    newTag: local
+patches:
+  - target:
+      kind: Deployment
+      name: backend
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 1
+  - target:
+      kind: Deployment
+      name: frontend
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 1
+labels:
+  - pairs:
+      security.policy: baseline
+      platform: secure-kubernetes-devsecops-platform
